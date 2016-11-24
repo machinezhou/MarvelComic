@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <declare-styleable name="TypefaceTextView">
+    <attr name="typeface" format="string|reference"/>
+  </declare-styleable>
+  <declare-styleable name="SwitchContainer">
+    <attr name="min_show_time" format="integer"/>
+    <attr name="prevent_flicker" format="boolean"/>
+    <attr name="auto_restore" format="boolean"/>
+  </declare-styleable>
+</resources>

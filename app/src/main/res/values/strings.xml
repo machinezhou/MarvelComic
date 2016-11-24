@@ -1,0 +1,11 @@
+<resources>
+  <string name="app_name">Marvel</string>
+
+  <string name="http_exception">HTTP exception</string>
+  <string name="no_connection">No connection</string>
+  <string name="unexpected_error">Unexpected error</string>
+  <string name="loading_empty">No data received</string>
+  <string name="loading_failed_retry">Loading data failed, please retry later</string>
+  <string name="retry">Retry</string>
+  <string name="press_once_again_to_exit">press once again to exit</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+  <TextView
+      android:id="@+id/left"
+      android:layout_width="@dimen/header_size"
+      android:layout_height="match_parent"
+      android:textSize="@dimen/text_medium"
+      android:textColor="@android:color/white"
+      android:layout_gravity="center_vertical|start"
+      android:gravity="center"
+      android:visibility="gone"
+  />
+  <com.zhou.lawson.marvelcomics.views.single.TypefaceTextView
+      android:id="@+id/title"
+      android:layout_width="@dimen/title_size"
+      android:layout_height="match_parent"
+      android:textSize="@dimen/text_medium_x"
+      android:textColor="@color/titleColor"
+      android:layout_gravity="center"
+      android:gravity="center"
+      app:typeface="nation_italic.ttf"
+  />
+  <TextView
+      android:id="@+id/right"
+      android:layout_width="@dimen/header_size"
+      android:layout_height="match_parent"
+      android:textSize="@dimen/text_medium"
+      android:textColor="@android:color/white"
+      android:layout_gravity="center_vertical|end"
+      android:gravity="center"
+      android:visibility="gone"
+  />
+</merge>

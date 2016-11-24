@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <com.facebook.drawee.view.SimpleDraweeView
+      android:id="@+id/introduction"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      fresco:viewAspectRatio="1.60"
+      fresco:backgroundImage="@android:color/black"
+  />
+  <ImageView
+      android:layout_below="@+id/introduction"
+      android:src="@drawable/avenger_logo"
+      android:scaleType="centerCrop"
+      android:layout_centerHorizontal="true"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
+
+</RelativeLayout>

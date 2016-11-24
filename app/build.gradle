@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+
+//if test api environments exist, move this block to Config
+def publicKey = "37425d749b0301ff752ffcb8f996acc5"
+def privateKey = "49dc7d166597f1957442e9237427ecc302a934f4"
+def basePath = "https://gateway.marvel.com:443"
+def apiVersion = "/v1/public/"
+def paramKey = "apikey"
+def paramHash = "hash"
+def paramTimestamp = "ts"
+
+android {
+  compileSdkVersion 24
+  buildToolsVersion "24.0.2"
+  defaultConfig {
+    applicationId "com.zhou.lawson.marvelcomics"
+    minSdkVersion 16
+    targetSdkVersion 24
+    versionCode 1
+    versionName "1.0"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    buildConfigField("String", "PUBLIC_KEY", "\"${publicKey}\"")
+    buildConfigField("String", "PRIVATE_KEY", "\"${privateKey}\"")
+    buildConfigField("String", "BASE_PATH", "\"${basePath}\"")
+    buildConfigField("String", "API_VERSION", "\"${apiVersion}\"")
+    buildConfigField("String", "PARAM_KEY", "\"${paramKey}\"")
+    buildConfigField("String", "PARAM_HASH", "\"${paramHash}\"")
+    buildConfigField("String", "PARAM_TIMESTAMP", "\"${paramTimestamp}\"")
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_7
+    targetCompatibility JavaVersion.VERSION_1_7
+  }
+}
+
+final SUPPORT_LIB_VERSION = '24.1.1'
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  })
+  compile "com.android.support:support-v4:${SUPPORT_LIB_VERSION}"
+  compile "com.android.support:appcompat-v7:${SUPPORT_LIB_VERSION}"
+  compile "com.android.support:recyclerview-v7:${SUPPORT_LIB_VERSION}"
+  compile "com.android.support:cardview-v7:${SUPPORT_LIB_VERSION}"
+  //rx
+  compile 'io.reactivex:rxjava:1.2.1'
+  compile 'io.reactivex:rxandroid:1.2.1'
+  //square
+  compile 'com.jakewharton.timber:timber:3.1.0'
+  compile 'com.squareup.sqlbrite:sqlbrite:0.7.0'
+  compile 'com.squareup.retrofit2:retrofit:2.1.0'
+  compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+  compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+  compile 'com.squareup.okhttp3:okhttp:3.4.1'
+  compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+  compile 'com.squareup.picasso:picasso:2.5.2'
+  compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
+  compile 'com.jakewharton:butterknife:8.4.0'
+  apt 'com.jakewharton:butterknife-compiler:8.4.0'
+  //google
+  compile 'com.google.code.gson:gson:2.4'
+  compile 'com.google.auto.value:auto-value:1.3-rc2'
+  //facebook
+  compile 'com.facebook.fresco:fresco:0.12.0'
+  compile 'com.facebook.fresco:animated-gif:0.12.0'
+  //tableinfo annotations
+  compile project(':tableinfo-annotations')
+  apt project(':tableinfo-compiler')
+
+  testCompile 'junit:junit:4.12'
+}

@@ -1,0 +1,201 @@
+package com.zhou.lawson.marvelcomics.util;
+
+/**
+ * Created by lawson on 16/4/9.
+ */
+
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * This is a constructor for initializing your model class.
+ *
+ * Its best use is to avoid handmade model class initialization especially when your model class is
+ * so complex or has static inline class.
+ *
+ * <p>You can create a InitializeConverter instance by invoking {@code new
+ * InitializeConverterBuilder().create()}
+ *
+ * <p>Here is an example of how InitializeConverter is used for a simple Class:
+ *
+ * <pre>
+ * MyType target = (MyType) new InitializeConverterBuilder().create("com.xxx.xxx", MyType.class);
+ * </pre></p>
+ *
+ * Note: non-static inline class won't be recognised. So try to avoid it.
+ *
+ * Created by lawson on 16/10/18.
+ */
+public final class InitializeConverter {
+
+  private static final String DEFAULT_STRING = "InitializeConverter";
+  private static final int DEFAULT_INTEGER = 1;
+  private static final float DEFAULT_FLOAT = 1.0f;
+  private static final double DEFAULT_DOUBLE = 1.0;
+
+  private String strSeed;
+  private int intSeed;
+  private float floatSeed;
+  private double doubleSeed;
+  private String packageName;
+
+  private InitializeConverter(String packageName, String strSeed, int intSeed, float floatSeed,
+      double doubleSeed) {
+    this.strSeed = strSeed;
+    this.intSeed = intSeed;
+    this.floatSeed = floatSeed;
+    this.doubleSeed = doubleSeed;
+    this.packageName = packageName;
+  }
+
+  @SuppressWarnings("unchecked") private Object from(Class service) {
+    Object object = null;
+    try {
+      object = service.newInstance();
+
+      Field[] fields = service.getDeclaredFields();
+      for (Field field : fields) {
+        Class fieldClass = field.getType();
+        if (fieldClass == String.class) {
+          assign(field, object, strSeed);
+        }
+        if (fieldClass == int.class) {
+          assign(field, object, intSeed);
+        }
+        if (fieldClass == float.class) {
+          assign(field, object, floatSeed);
+        }
+        if (fieldClass == double.class) {
+          assign(field, object, doubleSeed);
+        }
+        if (isCustomObject(fieldClass)) {
+          if (fieldClass.isEnum()) {
+            Object[] objects = fieldClass.getEnumConstants();
+            if (objects.length > 0) {
+              assign(field, object, objects[0]);  //set first enum value for initialization
+            }
+          } else {
+            assign(field, object, from(fieldClass));
+          }
+        }
+        if (fieldClass.isAssignableFrom(List.class)) {
+          List list = new ArrayList<>();
+          list.add(from(getGenericType(field))); //Only add one element for initialization
+          assign(field, object, list);
+        }
+      }
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    }
+
+    return object;
+  }
+
+  /**
+   * Whether this class created by developer or not
+   *
+   * @param c target class
+   */
+  private boolean isCustomObject(Class c) {
+    Package pack = c.getPackage();
+    if (pack != null) {
+      String name = pack.getName();
+      if (!TextUtils.isEmpty(name)) {
+        if (name.startsWith(packageName)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Assign a given value to specific field of a target object
+   *
+   * @throws IllegalAccessException
+   */
+  private void assign(Field field, Object object, Object value) throws IllegalAccessException {
+    boolean accessible = field.isAccessible();
+    field.setAccessible(true);
+    field.set(object, value);
+    field.setAccessible(accessible);
+  }
+
+  /**
+   * Returns the generic type of this field.
+   *
+   * @return the generic type
+   */
+  private Class getGenericType(Field field) {
+    ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+    Type[] types = parameterizedType.getActualTypeArguments();
+    return (Class) types[0];
+  }
+
+  public static class InitializeConverterBuilder {
+    private String strSeed;
+    private int intSeed;
+    private float floatSeed;
+    private double doubleSeed;
+
+    /**
+     * set string value
+     */
+    public InitializeConverterBuilder s(String strSeed) {
+      this.strSeed = strSeed;
+      return this;
+    }
+
+    /**
+     * set int value
+     */
+    public InitializeConverterBuilder i(int intSeed) {
+      this.intSeed = intSeed;
+      return this;
+    }
+
+    /**
+     * set float value
+     */
+    public InitializeConverterBuilder f(float floatSeed) {
+      this.floatSeed = floatSeed;
+      return this;
+    }
+
+    /**
+     * set double value
+     */
+    public InitializeConverterBuilder d(double doubleSeed) {
+      this.doubleSeed = doubleSeed;
+      return this;
+    }
+
+    public Object create(@NonNull String packageName, @NonNull Class target) {
+      if (TextUtils.isEmpty(packageName)) {
+        throw new IllegalArgumentException("package name must not be empty");
+      }
+      if (TextUtils.isEmpty(strSeed)) {
+        strSeed = DEFAULT_STRING;
+      }
+      if (intSeed == 0) {
+        intSeed = DEFAULT_INTEGER;
+      }
+      if (floatSeed == 0) {
+        floatSeed = DEFAULT_FLOAT;
+      }
+      if (doubleSeed == 0) {
+        doubleSeed = DEFAULT_DOUBLE;
+      }
+
+      return new InitializeConverter(packageName, strSeed, intSeed, floatSeed, doubleSeed).from(
+          target);
+    }
+  }
+}

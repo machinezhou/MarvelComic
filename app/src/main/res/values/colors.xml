@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="colorPrimary">#454E5E</color>
+  <color name="colorPrimaryDark">#100E1F</color>
+  <color name="colorAccent">#454E5E</color>
+  <color name="windowBackground">#F9F9FB</color>
+
+  <color name="titleColor">#C49A6C</color>
+  <color name="darkBlue">#17142B</color>
+  <color name="darkRed">#FF4351</color>
+  <color name="lightRed">#FF5848</color>
+
+  <color name="defaultTextColor">#F9F9FB</color>
+
+  <color name="tabColor">#CB928C</color>
+  <color name="tabStrokeColor">#E6E7D7</color>
+  <color name="indicatorColor">#93A2A7</color>
+
+  <color name="swipe_refresh_color_1">#FF4351</color>
+  <color name="swipe_refresh_color_2">#C49A6C</color>
+  <color name="swipe_refresh_color_3">#17142B</color>
+  <color name="swipe_refresh_color_4">#454E5E</color>
+  <color name="loading_view_color">#2F1F20</color>
+  <color name="loading_view_stroke_color">#584C4C</color>
+
+
+
+</resources>
